@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}My Recipients{% endblock %}
+
+{% block modal %}
+	{% for hook in hooks %}
+		<div class="modal fade modalDisp" id="{{hook.recipient}}modal">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal">&times;</button>
+				<h3><i class="icon-trash icon-large"></i> Are you sure?</h3>
+			</div>
+			<div class="modal-body">
+				<p>Do you really want to delete your recipient <em>{{hook.recipient}}</em> that points to <em>{{hook.script_url}}</em>?</p>
+			</div>
+			<div class="modal-footer" id="modalFooter">
+				<a href="#" class="btn" data-dismiss="modal">Cancel</a>
+				<a href="/delete?recipient={{hook.recipient}}" class="btn btn-danger">Yar! Delete him!</a>
+			</div>
+		</div>		
+	{% endfor %}
+{% endblock %}
+
+{% block navbar %}
+	<ul class="nav">
+	  <li class="active">
+		<a href="#">My Recipients</a>
+	  </li>
+	  <li><a href="../faq">FAQ</a></li>
+	</ul>
+	
+	<ul class="nav pull-right">
+	  <li class="visible-desktop" id="email">{{email}}</li>
+	  <li><a href="{% url core.views.log_user_out %}" id="logoutLink"><span id="logoutLinkSpan" class="hidden-desktop"><i class="icon-signout"></i></span> Sign Out</a></li>
+	</ul>	
+{% endblock %}
+
+
+{% block content %}	
+	{% if hooks.count > 0 %}	
+		<div class="row" id="view_row1">
+			<div class="span12">
+				<h4 id="title">My Recipients</h4>
+				<p id="key">Your Key	: <strong>{{security_key}}</strong></p>				
+			</div>
+		</div>
+			
+		<div class="row" id="view_row2">
+			<div class="span12">
+				<table class="table table-striped" >
+					<thead>
+						<tr id="headers">
+						  <th>Recipient</th>
+						  <th class="hidden-phone">POST To</th>
+						</tr>
+					</thead>
+					<tbody class="table-bordered">
+						{% for hook in hooks %}
+							<tr>
+								<td>
+									<a class="recipientLink" href="/details?recipient={{hook.recipient}}&script_url={{hook.script_url}}">
+										{{ hook.recipient }}
+									</a>
+								</td>
+								<td  class="hidden-phone">{{ hook.script_url }}</td>
+								<td class="tableEnd">
+									<a class="btn btn-mini" href="/edit?recipient={{hook.recipient}}">
+										<i class="icon-pencil"></i> edit
+									</a>
+									<a class="btn btn-mini btn-danger" href="#{{hook.recipient}}modal"  data-toggle="modal">
+										<i class="icon-trash"></i> delete
+									</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div class="row" id="view_row3">
+			<div class="span6">
+				{% if canAddMore %}
+					<a class="btn btn-primary" href="/add" >
+						<i class="icon-cogs"></i> Create Recipient
+					</a>        
+				{% endif %} 
+			</div>
+		</div>			
+	{% else %}		
+		<div class="row" id="view_row4">
+			<div class="span8 offset2">
+				<div class="hero-unit" id="heroPadding">
+					<h4 id="heroTitle">Hi There,</h4> 
+					<p id="heroP">Looks like you don't have any recipients yet!  <br />Add some to get started. Just give me a recipient name and a destination and I'll take care of the rest.  Then check the FAQ for more info on the POST request format.</p>
+					<a class="btn btn-primary btn-large" href="/add" >
+						<i class="icon-cogs icon-large"></i> <b>Create Recipient</b>
+					</a>
+				</div>
+			</div>
+		</div>		
+	{% endif %}	
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Details{% endblock %}
+
+{% block navbar %}
+	<ul class="nav">
+	  <li><a href="../myRecipients">My Recipients</a></li>
+	  <li><a href="../faq">FAQ</a></li>
+	</ul>
+	
+	<ul class="nav pull-right">
+	  <li class="visible-desktop" id="email">{{email}}</li>
+	  <li><a href="{% url core.views.log_user_out %}" id="logoutLink"><span id="logoutLinkSpan" class="hidden-desktop"><i class="icon-signout"></i></span> Sign Out</a></li>
+	</ul>	
+{% endblock %}
+
+
+{% block content %}		
+		<div class="row" id="view_row1">
+			<div class="span12">
+				<h4 id="title">Details</h4>	
+				<p id="key"><strong>Recipient: </strong>{{recipient}}<br /><strong>Destination: </strong>{{script_url}}</p>	
+			</div>
+		</div>
+	
+	{% if details.count > 0 %}	
+		<div class="row" id="details_row2">
+			<div class="span12">
+				<table class="table table-striped wrapMe" >
+					<thead>
+						<tr id="headers">
+						  <th>Status</th>
+						  <th>Sender</th>
+						  <th class="hidden-phone">Subject</th>
+						  <th class="hidden-phone">Response</th>
+						  <th>When</th>
+						</tr>
+					</thead>
+					<tbody class="table-bordered">
+						{% for detail in details %}
+							<tr>
+								<td>
+									{{ detail.status_code }}
+								</td>
+								<td>
+									{{ detail.sender }}
+								</td>
+								<td  class="hidden-phone">
+									{{ detail.subject }}
+								</td>
+								<td  class="hidden-phone">
+									{{ detail.returned_response }}
+								</td>
+								<td>
+									{{ detail.created }}
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+			
+	{% else %}		
+			<p id="key">Looks like nothing's been recieved yet!  Try back later.</p>
+	{% endif %} 
+	
+		
+	
+{% endblock %}
+
