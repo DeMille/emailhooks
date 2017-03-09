@@ -1,4 +1,4 @@
-<img src="https://emailhooks.xyz/static/img/name.svg" width="250px;" alt="Emailhooks.xyz">
+<img src="https://rawgit.com/DeMille/emailhooks/master/emailhooks/static/img/name.svg" width="250px;" alt="Emailhooks.xyz">
 <br/>
 Source for https://emailhooks.xyz
 
@@ -10,7 +10,7 @@ It is a python project that runs on google app engine. App engine is **required*
 
 More info about emailhooks on the [faq](https://emailhooks.xyz/faq).
 
-If you just want to handle incoming email and don't need a web app interface to add/remove/change recipients, consider running a stand alone receiver with [this project](https://github.com/DeMille/bare-bone-receiver). It's the same basic logic but a single python file.
+If you just want to handle incoming email and don't need a web app interface to add/remove/change recipients, consider running a stand alone receiver with [this project](https://github.com/DeMille/bare-bones-receiver). It's the same basic logic but a single python file.
 
 
 ### How to deploy
