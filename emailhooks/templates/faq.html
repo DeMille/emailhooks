@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}FAQ{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="envelope md">
+          <h2>FAQ</h2>
+
+          <h4 id="free">Is it free?</h4>
+            <p>
+              Yes! Emailhooks is meant to be an easy solution for light use cases. If you need to handle large amounts of mail, have big attachments, or need more control, you should set up <a href="https://github.com/demille/bare-bones-receiver">your own receiver</a> (it's really easy).
+              <br />
+              <br />
+              <i>~Disclaimer~</i>
+              <br />
+              I want emailhooks to be useful, but part of it being free is that it is run without the guarantees of a paid service. That said, emailhooks will be up as long as google app engine is up and I won't shut the service down without letting you know first.
+            </p>
+
+          <h4 id="request">What does the request look like?</h4>
+            <p style="margin-bottom: 10px;">
+              Requests are sent as POSTs with <code>Content-Type: application/json</code>:
+            </p>
+
+            <div class="well">
+<pre>{
+  "sender": "tom@example.com",
+  "to": [
+    "hook@emailhooks.xyz",
+    "alex@example.com"
+  ],
+  "cc": [
+    "elisha@example.com",
+  ],
+  "date": "Fri, 10 Mar 1876 15:54:49 -0500",
+  "subject": "Urgent!",
+  "html_body": "&lt;html&gt;&lt;div dir=\"ltr\"&gt;Mr. Watson, come here — I want to see you.&lt;/div&gt;&lt;/html&gt;",
+  "plain_body": "Mr. Watson, come here — I want to see you.",
+  "attachments": [
+    {
+      "filename": "example.txt",
+      "payload": "baWEfsdv25DF654... base64"
+    }
+  ]
+}</pre>
+            </div>
+
+            <h5>Notes</h5>
+            <ul>
+              <li><code>to</code>/<code>cc</code> fields are always arrays, even if there are 1 or no addresses</li>
+              <li><code>plain_body</code> is just the plain text version of <code>html_body</code></li>
+              <li>attachment payloads are base64 encoded</li>
+            </ul>
+
+          <h4>Validating requests?</h4>
+            <p>
+              To validate that a POST is coming from emailhooks, an HMAC-SHA1 signature is generated for each request and is included in the headers as <code>X-Hook-Signature</code>. The signature is created using the body of the request and a key unique to each user. You can find the key on your hook list page (<b class="small"><i class="icon-key"></i> XXXXXXXXXX</b>).
+              <br/>
+              <br/>
+              At your endpoint you can compute the signature using your secret key and compare it to the one in the request header to know if the request is valid. In python, for example, you could do this like:
+              <br/>
+              <code class="scroll">signature = hmac.new(bytes(key), bytes(request.body), hashlib.sha1).hexdigest()</code>
+            </p>
+
+          <h4>Attachments?</h4>
+            <p>
+              Attachments are ok <i><b>as long as the whole email is under 500kb</b></i> (including the attachments). Emails larger that 500kb will be ignored. This limit is in place to prevent the service from being swamped with big attachments. 500kb isn't much but it will probably work for small documents like csv files, small excel docs, etc.
+              <br/>
+              <br/>
+              If you need work with larger attachments you can set up your own receiver on google app engine pretty easily with <a href="https://github.com/demille/bare-bones-receiver">this project</a>. This will let you handle files up to 30mb.
+            </p>
+
+          <h4>Any limitations?</h4>
+            <ul>
+              <li>10 hooks per user</li>
+              <li>Emails must be < 500kb (see above 🡑)</li>
+            </ul>
+
+          <h4>Can I use my own domain?</h4>
+            <p>
+              If your registrar offers email forwarding you probably can. Just set an address on your domain to forward to your emailhooks recipient. You could also forward all emails from a catch-all address to your emailhooks recipient and use logic on your endpoint based on the email's <code>to</code> field.
+              <br/>
+              <br/>
+              Some registrars require you to verify the forward email first by sending an email to that address. You will need to have your hook destination ready to listen to that verification.
+            </p>
+
+          <h4>What data does emailhooks store?</h4>
+            <p>
+              Emailhooks keeps a log of each outgoing post request: response, response code, size, number of attachments. Actual incoming mail isn't stored.
+            </p>
+
+          <h4>Broke?</h4>
+            <p style="margin-bottom: 20px;">
+              Open an <a href="https://github.com/demille/emailhooks">issue</a>.
+            </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

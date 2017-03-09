@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Logs - {{ recipient | title }}{% endblock %}
+
+{% block content %}
+  <div class="header blue">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Logs: {{ recipient|lower }}@emailhooks.xyz</h2>
+          <p>
+            <i class="icon-right-small"></i>
+            {{ destination|lower }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if logs.object_list.count == 0 %}
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="envelope sm">
+
+            <h3 class="text-center">
+              Nothing received yet, check back later
+            </h3>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="envelope">
+
+            <div class="table-responsive">
+              <table class="table table-edged">
+                <thead>
+                  <tr id="headers">
+                    <th>Date</th>
+                    <th>Attachments</th>
+                    <th>Size</th>
+                    <th>Status</th>
+                    <th>Response</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for log in logs %}
+                    <tr>
+                      <td class='date'>
+                        {{ log.created|date:"r" }}
+                      </td>
+                      <td>
+                        {{ log.num_attachments|default:"None" }}
+                      </td>
+                      <td>
+                        {{ log.size|filesizeformat }}
+                      </td>
+                      <td>
+                        {{ log.status_code }}
+                      </td>
+                      <td class="last">
+                        {{ log.response }}
+                      </td>
+                    </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+
+            {% if logs.paginator.num_pages > 1 %}
+              <ul class="pager">
+                {% if logs.has_next %}
+                  <li class="older">
+                    <a href="?page={{ logs.next_page_number }}" class="btn btn-default">&larr; Older</a>
+                  </li>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ logs.number }} of {{ logs.paginator.num_pages }}
+                </span>
+
+                {% if logs.has_previous %}
+                  <li class="newer">
+                    <a href="?page={{ logs.previous_page_number }}" class="btn btn-default">Newer &rarr;</a>
+                  </li>
+                {% endif %}
+              </ul>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 'Tue, 14 Feb 2017 07:12:05 +0000' --> 'Tue 14 Feb 2017 2/14/2017 00:12:05'
+      function localize(str) {
+        var date = new Date(str);
+
+        return date.toDateString() + ' ' +
+          ('00' + date.getHours()).slice(-2) + ':' +
+          ('00' + date.getMinutes()).slice(-2) +  ':' +
+          ('00' + date.getSeconds()).slice(-2)
+      }
+
+      var elements = document.getElementsByClassName('date');
+
+      Array.prototype.forEach.call(elements, function(el) {
+        el.innerHTML = localize(el.innerHTML);
+      });
+
+    </script>
+
+  {% endif %}
+
+{% endblock %}

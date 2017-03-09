@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}Incoming mail{% endblock %}
+
+{% block content %}
+  <div class="banner top">
+    <div class="container-fluid">
+
+      <div class="row text-center">
+        <div class="col-md-10 col-md-offset-1">
+
+          <h1>Receive email in your web app via HTTP requests</h1>
+          <h1 class="subtitle">
+            Emailhooks turns incoming emails into JSON and sends them to your url.
+            It's <a href="{% url 'faq' %}#free">free</a>,
+            open source, and hosted on Google App Engine.
+          </h2>
+          <a href="{% url 'login' %}" class="btn btn-google shadow">
+            Sign in with Google
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row text-center">
+      <div class="col-sm-offset-2 col-sm-8">
+        <h2 style="margin-top: 0;">How does it work?</h2>
+        <p class="bigger" style="max-width: 580px; margin: 0 auto 10px;">
+          When you create a hook, anything sent (or forwarded) to the email address you make will be converted to a post request and passed to your destination.
+        </p>
+      </div>
+    </div>
+
+    <div class="row text-center home-steps">
+      <div class="col-sm-4 step">
+        <i class="icon-user icon-huge"></i>
+        <h4>Make a recipient</h4>
+        <p>
+          (e.g. myhook@emailhooks.xyz)
+          <br/>
+          Send email to this recipient directly or forward it email from your own domain
+        </p>
+      </div>
+      <div class="col-sm-4 step">
+        <i class="icon-globe icon-huge"></i>
+        <h4>Tell it where to go</h4>
+        <p>
+          (e.g. http://example.com/mail)
+          <br/>
+          Point the hook to your application
+        </p>
+      </div>
+      <div class="col-sm-4 step">
+        <i class="icon-paper-plane icon-huge"></i>
+        <h4>Handle like a normal request</h4>
+        <p>
+          Emails get forwarded to your endpoint where you can handle them like a normal <a href="{% url 'faq' %}#request">JSON post request</a>:
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-offset-2 col-md-8">
+        <div class="envelope sm">
+          <pre>
+POST /email HTTP/1.1
+Host: example.com
+Content-Type: application/json
+Content-Length: 371
+X-Hook-Signature: 5893fa3c6eead836d3742bdeabd4c4914c438ffb
+
+{
+  "sender": "tom@example.com",
+  "to": ["hook@emailhooks.xyz"],
+  "cc": ["elisha@example.com"],
+  "date": "Fri, 10 Mar 1876 15:54:49 -0500",
+  "subject": "Urgent!",
+  "html_body": "&lt;html&gt;&lt;div dir=\"ltr\"&gt;Mr. Watson, come here — I want to see you.&lt;/div&gt;&lt;/html&gt;",
+  "plain_body": "Mr. Watson, come here — I want to see you.",
+  "attachments": []
+}</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="banner bottom text-center">
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
+          <h2 style="margin: 0 0 30px">Open Source</h2>
+
+          <p class="bigger">
+            Emailhooks was made with django for google app engine. If you want to host your own copy you can find the project on github. If you want to host something simpler, check out the bare bones receiver project. It's accomplishes the same task (with one python file) and it's easy to set up on app engine.
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <h3 style="margin: 10px 0 20px">
+            <i class="icon-github"></i>
+          </h3>
+
+          <a class="btn btn-default btn-lg shadow" href="https://github.com/demille/emailhooks">
+            Emailhooks
+          </a>
+
+          <a class="btn btn-default btn-lg shadow" href="https://github.com/demille/bare-bone-reciever">
+            Bare Bones Reciever
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block pageTitle %}New Hook{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="envelope sm">
+
+          <h2>Create a New Hook</h2>
+
+          <form method="post">
+            {% csrf_token %}
+
+            {% include "form.html" %}
+
+            <div class="form-group text-right">
+              <a href="{% url 'hook_list' %}" class="btn btn-default btn-sm">
+                <i class="icon-cancel"></i> Cancel
+              </a>
+              <button type="submit" class="btn btn-primary btn-sm">Create Hook</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

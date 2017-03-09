@@ -1,0 +1,38 @@
+<div class="form-group {% if form.recipient.errors %}has-error{% endif %}">
+  {% if form.recipient.errors %}
+    <div class="alert alert-danger">
+      <p class="alert-heading">
+        {{ form.recipient.errors.as_text }}
+      </p>
+    </div>
+  {% endif %}
+
+  <label class="control-label">Recipient</label>
+  <div>
+    <div class="input-group">
+      <input type="text" class="form-control with-append"
+             placeholder="my_recipient"
+             name="{{ form.recipient.html_name }}"
+             value="{{ form.recipient.value|default:'' }}">
+      <span class="input-group-addon">@emailhooks.xyz</span>
+    </div>
+  </div>
+</div>
+
+<div class="form-group {% if form.destination.errors %}has-error{% endif %}">
+  {% if form.destination.errors %}
+    <div class="alert alert-danger">
+      <p class="alert-heading">
+        {{ form.destination.errors.as_text }}
+      </p>
+    </div>
+  {% endif %}
+
+  <label class="control-label">Destination</label>
+  <div>
+    <input type="text" class="form-control"
+           placeholder="http://httpbin.org/post"
+           name="{{ form.destination.html_name }}"
+           value="{{ form.destination.value|default:'' }}">
+  </div>
+</div>
