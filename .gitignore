@@ -61,7 +61,7 @@ target/
 .gaedata/
 
 # keep django secret out
-settings.py
+/settings.py
 
 # keep lets encrypt folder out too
 /well-known
