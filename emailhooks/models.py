@@ -46,18 +46,20 @@ class Email():
         self.to = [a[1] for a in getaddresses([message.to])]
         self.cc = [a[1] for a in getaddresses([getattr(message, 'cc', '')])]
 
-        # parse the hook recipient from the original msg
-        # depending on catchall/forward settings, might be in here:
-        # "for <_____ @emailhooks.xyz>" or "for _____ @emailhooks.xyz"
-        match = re.search('<(.*?)@emailhooks.xyz>', str(message.original), re.IGNORECASE)
-        self.recipient = match.group(1).lower() if match else None
+        self.recipient = None
 
-        # match fails on dev server, (possibly elsewhere), so do a simple check
+        # check hook recipient in message.to list first
+        for addr in self.to:
+            if (addr.split('@')[1] == 'emailhooks.xyz'):
+                self.recipient = addr.split('@')[0]
+                break
+
+        # if not in message.to, parse hook recipient from forwarding
+        # details following the patterns:
+        # "for <_____ @emailhooks.xyz>" or "for _____ @emailhooks.xyz"
         if (self.recipient is None):
-            for addr in self.to:
-                if (addr.split('@')[1] == 'emailhooks.xyz'):
-                    self.recipient = addr.split('@')[0]
-                    break
+            match = re.search('for <?(\S+)@emailhooks\.xyz', body, re.IGNORECASE)
+            self.recipient = match.group(1).lower() if match else None
 
         self.sender = parseaddr(message.sender)[1]
         self.subject = getattr(message, 'subject', '')
