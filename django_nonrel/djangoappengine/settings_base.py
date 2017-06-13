@@ -69,12 +69,14 @@ FILE_UPLOAD_HANDLERS = (
     'django.core.files.uploadhandler.MemoryFileUploadHandler',
 )
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'TIMEOUT': 0,
-    }
-}
+# Removing memcache dep:
+#
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'TIMEOUT': 0,
+#     }
+# }
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
